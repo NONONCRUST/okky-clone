@@ -1,16 +1,22 @@
 "use client"
 
-import DarkModeToggleButton from "@/components/DarkModeToggleButton"
 import HeaderButton from "@/components/HeaderButton"
 import HeaderInput from "@/components/HeaderInput"
 import HeaderLogo from "@/components/HeaderLogo"
 import NAVIGATIONS from "@/lib/constants/navigation"
+import PATH from "@/lib/constants/path"
+import { Session } from "next-auth"
+import { signOut } from "next-auth/react"
 import Link from "next/link"
 import React from "react"
+import DarkModeToggleButton from "./DarkModeToggleButton"
+import Avatar from "./common/Avatar"
 
-const Header: React.FC = () => {
-  const IS_LOGGED_IN = true
+interface Props {
+  session: Session | null
+}
 
+const Header: React.FC<Props> = ({ session }) => {
   return (
     <header
       className="sticky top-0 z-20 flex items-center h-16 py-5 text-sm font-medium leading-6 bg-white border-b border-b-gray-500/30 dark:border-b-gray-500/70 dark:bg-gray-800"
@@ -38,14 +44,19 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-8">
             <HeaderInput />
             <DarkModeToggleButton />
-            {IS_LOGGED_IN && (
+            {session && (
               <div className="flex items-center gap-2">
-                <HeaderButton variant="outlined">로그아웃</HeaderButton>
+                <Avatar src={session.user?.image} size={30} />
+                <HeaderButton variant="outlined" onClick={() => signOut()}>
+                  로그아웃
+                </HeaderButton>
               </div>
             )}
-            {!IS_LOGGED_IN && (
+            {!session && (
               <div className="flex gap-2">
-                <HeaderButton variant="outlined">로그인</HeaderButton>
+                <Link href={PATH.LOGIN}>
+                  <HeaderButton variant="outlined">로그인</HeaderButton>
+                </Link>
                 <HeaderButton variant="contained">회원가입</HeaderButton>
               </div>
             )}
