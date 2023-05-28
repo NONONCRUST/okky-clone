@@ -1,6 +1,5 @@
 import Header from "@/components/Header"
 import authOptions from "@/lib/options/authOptions"
-import DarkMode from "@/providers/DarkMode"
 import NextAuth from "@/providers/NextAuth"
 import ReactHotToast from "@/providers/ReactHotToast"
 import ReactQuery from "@/providers/ReactQuery"
@@ -44,12 +43,10 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       <body className={"dark:bg-gray-800"}>
         <Recoil>
           <ReactQuery>
-            <DarkMode>
-              <NextAuth>
-                <Header session={session} />
-                {children}
-              </NextAuth>
-            </DarkMode>
+            <NextAuth>
+              <Header session={session} />
+              {children}
+            </NextAuth>
           </ReactQuery>
         </Recoil>
         <ReactHotToast />

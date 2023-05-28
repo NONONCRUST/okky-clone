@@ -1,8 +1,6 @@
 import { NextMiddlewareWithAuth, withAuth } from "next-auth/middleware"
 
-const middleware: NextMiddlewareWithAuth = (req) => {
-  console.log(req)
-}
+const middleware: NextMiddlewareWithAuth = () => {}
 
 export default withAuth(middleware)
 

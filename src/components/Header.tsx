@@ -17,8 +17,10 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ session }) => {
-  const callbackUrl = usePathname()
-  const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+  const pathname = usePathname()
+  const encodedCallbackUrl = encodeURIComponent(pathname)
+
+  if (pathname === PATH.LOGIN || pathname === PATH.SIGNUP) return null
 
   return (
     <header
@@ -27,7 +29,7 @@ const Header: React.FC<Props> = ({ session }) => {
     >
       <nav
         aria-label="Global"
-        className="flex items-center justify-end w-full gap-8 px-4 mx-auto max-w-7xl"
+        className="flex items-center justify-end w-full gap-8 px-4 mx-auto max-w-7xl lg:px-0"
       >
         <div className="flex items-center justify-between w-full">
           <div className="flex">
@@ -45,11 +47,11 @@ const Header: React.FC<Props> = ({ session }) => {
             </div>
           </div>
           <div className="flex items-center gap-8">
-            <HeaderInput />
+            <HeaderInput className="hidden sm:block" />
             {/* <DarkModeToggleButton /> */}
             {session && (
               <div className="flex items-center gap-2">
-                <Avatar src={session.user?.image} size={30} />
+                <Avatar src={session.user?.image} size={32} />
                 <HeaderButton variant="outlined" onClick={() => signOut()}>
                   로그아웃
                 </HeaderButton>
