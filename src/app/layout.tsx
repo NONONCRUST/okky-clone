@@ -1,29 +1,32 @@
 import Header from "@/components/Header"
+import authOptions from "@/lib/options/authOptions"
+import NextAuth from "@/providers/NextAuth"
 import ReactHotToast from "@/providers/ReactHotToast"
 import ReactQuery from "@/providers/ReactQuery"
 import Recoil from "@/providers/Recoil"
-import clsx from "clsx"
 import { Metadata } from "next"
+import { getServerSession } from "next-auth"
 import localFont from "next/font/local"
 import "./globals.css"
 
 const font = localFont({
-  src: "fonts/PretendardVariable.woff2",
-  fallback: [
-    "Pretendard",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    "system-ui",
-    "Roboto",
-    "Helvetica Neue",
-    "Segoe UI",
-    "Apple SD Gothic Neo",
-    "Noto Sans KR",
-    "Malgun Gothic",
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "sans-serif",
+  src: [
+    {
+      path: "fonts/Pretendard-Regular.subset.woff2",
+      weight: "400",
+    },
+    {
+      path: "fonts/Pretendard-Medium.subset.woff2",
+      weight: "500",
+    },
+    {
+      path: "fonts/Pretendard-SemiBold.subset.woff2",
+      weight: "600",
+    },
+    {
+      path: "fonts/Pretendard-Bold.subset.woff2",
+      weight: "700",
+    },
   ],
 })
 
@@ -32,14 +35,18 @@ export const metadata: Metadata = {
   description: "Okky Clone Project",
 }
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getServerSession(authOptions)
+
   return (
-    <html lang="ko-KR" className={font.className}>
-      <body className={clsx(font.className, "dark:bg-gray-800")}>
+    <html lang="ko-KR" suppressHydrationWarning className={font.className}>
+      <body className={"dark:bg-gray-800"}>
         <Recoil>
           <ReactQuery>
-            <Header />
-            {children}
+            <NextAuth>
+              <Header session={session} />
+              {children}
+            </NextAuth>
           </ReactQuery>
         </Recoil>
         <ReactHotToast />

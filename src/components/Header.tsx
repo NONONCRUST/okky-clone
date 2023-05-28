@@ -1,15 +1,26 @@
 "use client"
 
-import DarkModeToggleButton from "@/components/DarkModeToggleButton"
 import HeaderButton from "@/components/HeaderButton"
 import HeaderInput from "@/components/HeaderInput"
 import HeaderLogo from "@/components/HeaderLogo"
 import NAVIGATIONS from "@/lib/constants/navigation"
+import PATH from "@/lib/constants/path"
+import { Session } from "next-auth"
+import { signOut } from "next-auth/react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import React from "react"
+import Avatar from "./common/Avatar"
 
-const Header: React.FC = () => {
-  const IS_LOGGED_IN = true
+interface Props {
+  session: Session | null
+}
+
+const Header: React.FC<Props> = ({ session }) => {
+  const pathname = usePathname()
+  const encodedCallbackUrl = encodeURIComponent(pathname)
+
+  if (pathname === PATH.LOGIN || pathname === PATH.SIGNUP) return null
 
   return (
     <header
@@ -18,7 +29,7 @@ const Header: React.FC = () => {
     >
       <nav
         aria-label="Global"
-        className="flex items-center justify-end w-full gap-8 px-4 mx-auto max-w-7xl"
+        className="flex items-center justify-end w-full gap-8 px-4 mx-auto max-w-7xl lg:px-0"
       >
         <div className="flex items-center justify-between w-full">
           <div className="flex">
@@ -36,16 +47,21 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-8">
-            <HeaderInput />
-            <DarkModeToggleButton />
-            {IS_LOGGED_IN && (
+            <HeaderInput className="hidden sm:block" />
+            {/* <DarkModeToggleButton /> */}
+            {session && (
               <div className="flex items-center gap-2">
-                <HeaderButton variant="outlined">로그아웃</HeaderButton>
+                <Avatar src={session.user?.image} size={32} />
+                <HeaderButton variant="outlined" onClick={() => signOut()}>
+                  로그아웃
+                </HeaderButton>
               </div>
             )}
-            {!IS_LOGGED_IN && (
+            {!session && (
               <div className="flex gap-2">
-                <HeaderButton variant="outlined">로그인</HeaderButton>
+                <Link href={`${PATH.LOGIN}?callbackUrl=${encodedCallbackUrl}`}>
+                  <HeaderButton variant="outlined">로그인</HeaderButton>
+                </Link>
                 <HeaderButton variant="contained">회원가입</HeaderButton>
               </div>
             )}
