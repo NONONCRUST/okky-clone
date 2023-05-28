@@ -3,9 +3,16 @@ import Button from "@/components/common/Button"
 import Input from "@/components/common/Input"
 import LinkText from "@/components/common/LinkText"
 import PATH from "@/lib/constants/path"
+import authOptions from "@/lib/options/authOptions"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
-const LoginPage = () => {
+const LoginPage = async () => {
+  const session = await getServerSession(authOptions)
+
+  if (session) redirect(PATH.HOME)
+
   return (
     <main>
       <div className="flex justify-center px-6 pb-16 mt-20 sm:mt-32 sm:px-0">
@@ -34,7 +41,7 @@ const LoginPage = () => {
                 </span>
               </div>
             </div>
-            <div className="mt-8 space-y-6">
+            <form className="mt-8 space-y-6">
               <div className="flex flex-col">
                 <label
                   htmlFor="user-id"
@@ -42,18 +49,18 @@ const LoginPage = () => {
                 >
                   아이디
                 </label>
-                <Input id="user-id" className="mt-1" />
+                <Input className="mt-1" id="user-id" name="user-id" />
               </div>
               <div className="flex flex-col">
                 <label
-                  htmlFor="user-id"
+                  htmlFor="user-password"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   비밀번호
                 </label>
-                <Input id="user-id" className="mt-1" />
+                <Input className="mt-1" id="user-password" name="user-id" />
               </div>
-            </div>
+            </form>
             <div className="flex items-center justify-end">
               <Link
                 className="mt-6 text-sm text-blue-500 hover:text-blue-400"

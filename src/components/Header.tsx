@@ -8,8 +8,8 @@ import PATH from "@/lib/constants/path"
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import React from "react"
-import DarkModeToggleButton from "./DarkModeToggleButton"
 import Avatar from "./common/Avatar"
 
 interface Props {
@@ -17,6 +17,9 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ session }) => {
+  const callbackUrl = usePathname()
+  const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+
   return (
     <header
       className="sticky top-0 z-20 flex items-center h-16 py-5 text-sm font-medium leading-6 bg-white border-b border-b-gray-500/30 dark:border-b-gray-500/70 dark:bg-gray-800"
@@ -43,7 +46,7 @@ const Header: React.FC<Props> = ({ session }) => {
           </div>
           <div className="flex items-center gap-8">
             <HeaderInput />
-            <DarkModeToggleButton />
+            {/* <DarkModeToggleButton /> */}
             {session && (
               <div className="flex items-center gap-2">
                 <Avatar src={session.user?.image} size={30} />
@@ -54,7 +57,7 @@ const Header: React.FC<Props> = ({ session }) => {
             )}
             {!session && (
               <div className="flex gap-2">
-                <Link href={PATH.LOGIN}>
+                <Link href={`${PATH.LOGIN}?callbackUrl=${encodedCallbackUrl}`}>
                   <HeaderButton variant="outlined">로그인</HeaderButton>
                 </Link>
                 <HeaderButton variant="contained">회원가입</HeaderButton>

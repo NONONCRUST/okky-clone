@@ -21,6 +21,7 @@ const HeaderInput: React.FC = () => {
           type="text"
           placeholder="검색"
           className="w-full p-0 pr-2 text-sm font-normal bg-transparent border-none placeholder-gray-500/80 focus:border-gray-500 focus:outline-none focus:ring-0"
+          name="search-input"
         />
       </div>
     </div>

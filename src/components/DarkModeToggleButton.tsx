@@ -13,6 +13,8 @@ const DarkModeToggleButton: React.FC = () => {
     darkModeEnabled ? setTheme("light") : setTheme("dark")
   }
 
+  console.log(darkModeEnabled)
+
   return (
     <Switch
       checked={darkModeEnabled}
@@ -22,7 +24,6 @@ const DarkModeToggleButton: React.FC = () => {
         "items-center relative inline-flex h-8 w-14 sm:h-6 sm:w-11 cursor-pointer rounded-full"
       )}
     >
-      <span className="sr-only">Use setting</span>
       <span
         aria-hidden="true"
         className={clsx(
