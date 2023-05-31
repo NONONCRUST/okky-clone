@@ -5,11 +5,12 @@ import HeaderInput from "@/components/HeaderInput"
 import HeaderLogo from "@/components/HeaderLogo"
 import NAVIGATIONS from "@/lib/constants/navigation"
 import PATH from "@/lib/constants/path"
+import { Menu } from "@headlessui/react"
 import { Session } from "next-auth"
-import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React from "react"
+import HeaderDropdown from "./HeaderDropdown"
 import Avatar from "./common/Avatar"
 
 interface Props {
@@ -50,12 +51,12 @@ const Header: React.FC<Props> = ({ session }) => {
             <HeaderInput className="hidden sm:block" />
             {/* <DarkModeToggleButton /> */}
             {session && (
-              <div className="flex items-center gap-2">
-                <Avatar src={session.user?.image} size={32} />
-                <HeaderButton variant="outlined" onClick={() => signOut()}>
-                  로그아웃
-                </HeaderButton>
-              </div>
+              <Menu as="div" className="relative w-8 h-8">
+                <Menu.Button>
+                  <Avatar src={session.user?.image} size={32} />
+                </Menu.Button>
+                <HeaderDropdown />
+              </Menu>
             )}
             {!session && (
               <div className="flex gap-2">
